@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import NewsItem from '../newsItem';
-import { Pagination, Search } from '../../../common';
+import { Pagination, Search, withLoadingHandlers } from '../../../common';
 import { loadArticles, changePage, updateSearchValue } from '../../actions';
-import { getArticles, getCurrentPage, getTotalPage } from '../../reducer';
+import { getArticles, getCurrentPage, getTotalPage, getWrapperProps } from '../../reducer';
 
 class NewsList extends React.Component {
   componentDidMount() {
@@ -15,10 +15,12 @@ class NewsList extends React.Component {
   getListItems = articles => articles.map(article => <NewsItem key={article.title} {...article} />);
 
   render() {
-    const { articles, currentPage, totalPageNumber } = this.props;
+    const {
+      articles, currentPage, totalPageNumber, className,
+    } = this.props;
     return (
-      <div>
-        Search by title: <Search onChange={this.props.updateSearchValue} />
+      <div className={`${className} articles-container`}>
+        <Search onChange={this.props.updateSearchValue} />
         {this.getListItems(articles)}
         <Pagination
           currentPage={currentPage}
@@ -37,6 +39,11 @@ NewsList.propTypes = {
   loadArticles: PropTypes.func.isRequired,
   changePage: PropTypes.func.isRequired,
   updateSearchValue: PropTypes.func.isRequired,
+  className: PropTypes.string,
+};
+
+NewsList.defaultProps = {
+  className: '',
 };
 
 function mapStateToProps(state) {
@@ -44,11 +51,14 @@ function mapStateToProps(state) {
     articles: getArticles(state),
     currentPage: getCurrentPage(state),
     totalPageNumber: getTotalPage(state),
+    ...getWrapperProps(state),
   };
 }
+
+const NewsWithLoadingWrapper = withLoadingHandlers(NewsList);
 
 export default connect(mapStateToProps, {
   loadArticles,
   changePage,
   updateSearchValue,
-})(NewsList);
+})(NewsWithLoadingWrapper);

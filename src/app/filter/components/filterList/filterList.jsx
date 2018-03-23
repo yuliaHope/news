@@ -9,8 +9,10 @@ import {
   getCountryFilter,
   getCategoryFilter,
   getSourceFilter,
+  getWrapperProps,
 } from '../../reducer';
 import { mappedCategories, mappedCountries, filters } from './constants';
+import { withLoadingHandlers } from '../../../common';
 
 const SOURCE_RADIO_VALUE = 'source';
 const MANUAL_RADIO_VALUE = 'category';
@@ -46,45 +48,53 @@ class FilterList extends React.Component {
 
   render() {
     const {
-      sources, countryFilter, sourceFilter, categoryFilter,
+      sources, countryFilter, sourceFilter, categoryFilter, className,
     } = this.props;
 
     return (
-      <form>
-        <input
-          type="radio"
-          name="filter"
-          value={SOURCE_RADIO_VALUE}
-          onChange={this.handleRadioChange}
-        />
-        <FilterItem
-          label={filters.sources}
-          options={sources}
-          value={sourceFilter}
-          onChange={this.handleFilterChange(filters.sources, MANUAL_RADIO_VALUE)}
-          disabled={this.isFilterDisabled(SOURCE_RADIO_VALUE)}
-        />
-        <input
-          type="radio"
-          name="filter"
-          checked={this.isFilterDisabled(SOURCE_RADIO_VALUE)}
-          value={MANUAL_RADIO_VALUE}
-          onChange={this.handleRadioChange}
-        />
-        <FilterItem
-          label={filters.category}
-          options={mappedCategories}
-          value={categoryFilter}
-          onChange={this.handleFilterChange(filters.category, SOURCE_RADIO_VALUE)}
-          disabled={this.isFilterDisabled(MANUAL_RADIO_VALUE)}
-        />
-        <FilterItem
-          label={filters.country}
-          options={mappedCountries}
-          value={countryFilter}
-          onChange={this.handleFilterChange(filters.country, SOURCE_RADIO_VALUE)}
-          disabled={this.isFilterDisabled(MANUAL_RADIO_VALUE)}
-        />
+      <form className={`${className} filters`}>
+        <div className="filter-container">
+          <input
+            type="radio"
+            name="filter"
+            value={SOURCE_RADIO_VALUE}
+            onChange={this.handleRadioChange}
+          />
+          <div>
+            <FilterItem
+              label={filters.sources}
+              options={sources}
+              value={sourceFilter}
+              onChange={this.handleFilterChange(filters.sources, MANUAL_RADIO_VALUE)}
+              disabled={this.isFilterDisabled(SOURCE_RADIO_VALUE)}
+            />
+          </div>
+        </div>
+        <div className="filter-container">
+          <input
+            type="radio"
+            name="filter"
+            checked={this.isFilterDisabled(SOURCE_RADIO_VALUE)}
+            value={MANUAL_RADIO_VALUE}
+            onChange={this.handleRadioChange}
+          />
+          <div>
+            <FilterItem
+              label={filters.category}
+              options={mappedCategories}
+              value={categoryFilter}
+              onChange={this.handleFilterChange(filters.category, SOURCE_RADIO_VALUE)}
+              disabled={this.isFilterDisabled(MANUAL_RADIO_VALUE)}
+            />
+            <FilterItem
+              label={filters.country}
+              options={mappedCountries}
+              value={countryFilter}
+              onChange={this.handleFilterChange(filters.country, SOURCE_RADIO_VALUE)}
+              disabled={this.isFilterDisabled(MANUAL_RADIO_VALUE)}
+            />
+          </div>
+        </div>
       </form>
     );
   }
@@ -98,6 +108,11 @@ FilterList.propTypes = {
   categoryFilter: PropTypes.string.isRequired,
   sourceFilter: PropTypes.string.isRequired,
   changeFilter: PropTypes.func.isRequired,
+  className: PropTypes.string,
+};
+
+FilterList.defaultProps = {
+  className: '',
 };
 
 function mapStateToProps(state) {
@@ -106,11 +121,14 @@ function mapStateToProps(state) {
     countryFilter: getCountryFilter(state),
     categoryFilter: getCategoryFilter(state),
     sourceFilter: getSourceFilter(state),
+    ...getWrapperProps(state),
   };
 }
+
+const filterWithLoadingWrapper = withLoadingHandlers(FilterList);
 
 export default connect(mapStateToProps, {
   loadSourceOptions,
   applyFilterChanges,
   changeFilter,
-})(FilterList);
+})(filterWithLoadingWrapper);

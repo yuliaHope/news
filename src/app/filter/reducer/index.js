@@ -8,13 +8,17 @@ const initialState = {
   source: NO_SELECTED,
   category: NO_SELECTED,
   country: 'us',
+  loaded: false,
+  error: '',
 };
 
 export default function filter(state = initialState, action) {
   switch (action.type) {
     case RECEIVE_SOURCE_OPTIONS: {
       const sources = [defaultSourceObject, ...action.sources];
-      return { ...state, sources, loaded: true };
+      return {
+        ...state, sources, loaded: true, error: action.message,
+      };
     }
     case REQUEST_SOURCE_OPTIONS: {
       return { ...state, loaded: false };
@@ -22,22 +26,20 @@ export default function filter(state = initialState, action) {
     case FILTER_CHANGE: {
       return { ...state, ...action.payload };
     }
-    default: return state;
+    default:
+      return state;
   }
 }
 
-export function getSourceOptions(state) {
-  return state.filter.sources;
-}
+export const getSourceOptions = state => state.filter.sources;
 
-export function getSourceFilter(state) {
-  return state.filter.source;
-}
+export const getSourceFilter = state => state.filter.source;
 
-export function getCategoryFilter(state) {
-  return state.filter.category;
-}
+export const getCategoryFilter = state => state.filter.category;
 
-export function getCountryFilter(state) {
-  return state.filter.country;
-}
+export const getCountryFilter = state => state.filter.country;
+
+export const getWrapperProps = (state) => {
+  const { loaded, error } = state.filter;
+  return { loaded, error };
+};

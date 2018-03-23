@@ -18,7 +18,11 @@ export default class Search extends React.Component {
 
   render() {
     const { searchValue } = this.state;
-    return <input value={searchValue} onChange={this.handleChange} />;
+    return (
+      <div className="search">
+        Search by title: <input value={searchValue} onChange={this.handleChange} />
+      </div>
+    );
   }
 }
 

@@ -5,7 +5,7 @@ export default function Pagination({ currentPage, onChange, totalPage }) {
   const firstPage = 1;
   const step = 1;
   return (
-    <div>
+    <div className="pagination">
       <button disabled={currentPage === firstPage} onClick={onChange(currentPage - step)}>
         Prev
       </button>

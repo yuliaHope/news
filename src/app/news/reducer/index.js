@@ -7,6 +7,7 @@ const initialState = {
   articles: EMPTY_ARTICLES,
   totalPages: 0,
   loaded: false,
+  error: '',
   currentPage: 0,
   searchValue: '',
 };
@@ -14,7 +15,7 @@ const initialState = {
 export default function news(state = initialState, action) {
   switch (action.type) {
     case RECEIVE_ARTICLES: {
-      const { articles, totalResults } = action;
+      const { articles = [], totalResults, message } = action;
       let total = totalResults / PAGE_SIZE;
       total = Math.round(total) < total ? total + 1 : total;
       return {
@@ -23,6 +24,7 @@ export default function news(state = initialState, action) {
         totalPages: Math.round(total),
         currentPage: articles.length ? state.currentPage || 1 : 0,
         loaded: true,
+        error: message,
       };
     }
     case REQUEST_ARTICLES: {
@@ -46,3 +48,7 @@ export const getArticles = (state) => {
 
 export const getCurrentPage = state => state.news.currentPage;
 export const getTotalPage = state => state.news.totalPages;
+export const getWrapperProps = (state) => {
+  const { loaded, error } = state.news;
+  return { loaded, error };
+};

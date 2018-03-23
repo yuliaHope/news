@@ -11,7 +11,7 @@ const paths = {
 module.exports = {
   entry: {
     main: path.join(paths.APP_DIR, 'index.jsx'),
-    vendor: ['react', 'react-dom', 'redux', 'react-redux'],
+    vendor: ['react', 'react-dom', 'redux', 'react-redux', 'prop-types'],
   },
   output: {
     path: paths.BUILD_DIR,

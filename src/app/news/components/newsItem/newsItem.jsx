@@ -8,12 +8,12 @@ export default function NewsItem(props) {
     urlToImage, title, description, author, publishedAt,
   } = props;
   return (
-    <div>
-      <div>
-        <div>{title}</div>
+    <div className="news-item">
+      <div className="news-item-body">
+        <h4 className="title">{title}</h4>
         <div>{description}</div>
-        <span>{author}</span>
-        <span>{dateToLocaleString(publishedAt)}</span>
+        <div>{author}</div>
+        <div>{dateToLocaleString(publishedAt)}</div>
       </div>
       <Image url={urlToImage} />
     </div>

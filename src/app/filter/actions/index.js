@@ -24,11 +24,7 @@ export const loadSourceOptions = () => (dispatch) => {
   dispatch(requestSourceOptions());
 
   return fetch(`${URL}sources?apiKey=${API_KEY}`)
-    .then(
-      response => response.json(),
-
-      error => console.log('An error occurred.', error),
-    )
+    .then(response => response.json())
     .then(json => dispatch(receiveSourceOptions(json)));
 };
 

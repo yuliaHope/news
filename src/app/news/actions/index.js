@@ -45,11 +45,7 @@ export const loadArticles = () => (dispatch, getState) => {
   const paginationQuery = `pageSize=${PAGE_SIZE}&page=${currentPage || 1}&`;
 
   return fetch(`${URL}top-headlines?${query}${paginationQuery}apiKey=${API_KEY}`)
-    .then(
-      response => response.json(),
-
-      error => console.log('An error occurred.', error),
-    )
+    .then(response => response.json())
     .then(json => dispatch(receiveArticles(json)));
 };
 
